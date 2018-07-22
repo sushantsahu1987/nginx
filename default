@@ -1,0 +1,57 @@
+
+# Default server configuration
+#
+
+upstream homepage {
+	server 127.0.0.1:3000;
+}
+
+server {
+	listen 80;
+
+	index index.html index.htm index.nginx-debian.html;
+
+	server_name sushantsahu.com;
+
+	location / {
+		try_files $uri $uri/ =404;
+		proxy_pass http://localhost:3000/;
+	}
+
+}
+
+server {
+	server_name test.sushantsahu.com;
+	location / {
+		proxy_pass http://localhost:3001/;
+	}
+
+}
+
+server {
+	server_name apps.sushantsahu.com;
+	root ~/apps/moviedb/build;
+	index index.html;
+	location /{
+		proxy_pass http://localhost:3002/;
+	}
+
+}
+# Virtual Host configuration for example.com
+#
+# You can move that to a different file under sites-available/ and symlink that
+# to sites-enabled/ to enable it.
+#
+#server {
+#	listen 80;
+#	listen [::]:80;
+#
+#	server_name example.com;
+#
+#	root /var/www/example.com;
+#	index index.html;
+#
+#	location / {
+#		try_files $uri $uri/ =404;
+#	}
+#}
