@@ -1,0 +1,46 @@
+server {
+
+        # root /var/www/sushantsahu.in/html;
+        # index index.html index.htm index.nginx-debian.html;
+
+        server_name www.sushantsahu.in;
+
+#       location /_next/static/ {
+#               gzip on;
+#               gzip_comp_level 5;
+#               gzip_proxied any;
+#               gzip_vary on;
+#               gzip_min_length 1024;
+#               gzip_types application/javascript;
+#               expires 30d;
+#               alias /root/Github/sushantsahu/sushantsahu-dashboard/build/static/;
+#       }
+
+        location / {
+                # reverse proxy for next server
+                proxy_pass http://127.0.0.1:3000;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+
+        # we need to remove this 404 handling
+        # because next's _next folder and own handling
+                # try_files $uri $uri/ =404;
+        }
+
+    rewrite ^/(.*)/$ /$1 permanent;
+
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/sushantsahu.in/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sushantsahu.in/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = www.sushantsahu.in) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
