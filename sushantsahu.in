@@ -1,20 +1,8 @@
-server {
-
         # root /var/www/sushantsahu.in/html;
         # index index.html index.htm index.nginx-debian.html;
 
         server_name www.sushantsahu.in;
 
-#       location /_next/static/ {
-#               gzip on;
-#               gzip_comp_level 5;
-#               gzip_proxied any;
-#               gzip_vary on;
-#               gzip_min_length 1024;
-#               gzip_types application/javascript;
-#               expires 30d;
-#               alias /root/Github/sushantsahu/sushantsahu-dashboard/build/static/;
-#       }
 
         location / {
                 # reverse proxy for next server
@@ -44,3 +32,16 @@ server {
     if ($host = www.sushantsahu.in) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+        return 301 https://$host$request_uri;
+
+        server_name your_domain www.sushantsahu.in;
+    return 404; # managed by Certbot
+
+
+}
+
+"sushantsahu.in" 48L, 1397C                                                                                                                                     24,0-1        Bot
